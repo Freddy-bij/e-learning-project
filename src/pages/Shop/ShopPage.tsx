@@ -2,8 +2,11 @@ import { useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { allProducts } from '../../Types/Product';
 import { ShopSidebar } from '../../shared/components/ShopSidebar';
-import { ProductCard } from '../../shared/Productgrid';
+
 import FlotingCart from '../../shared/components/ui/FlotingCart';
+import ProductCart from "../../shared/Productgrid"
+
+
 
 const ShopPage = () => {
   const { categoryName } = useParams(); 
@@ -129,7 +132,7 @@ const ShopPage = () => {
            
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
               {filteredProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCart key={product.id} product={product} />
               ))}
             </div>
 

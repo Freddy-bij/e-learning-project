@@ -1,7 +1,11 @@
 import { Heart, Search, ArrowRightLeft } from 'lucide-react';
 import type { Product } from '../Types/types';
 
-export const ProductCard = ({ product }: { product: Product }) => (
+
+interface ProductCartProps {
+  product: Product;
+}
+ const ProductCart = ({ product }: ProductCartProps) => (
   <div className="group relative bg-white transition-all duration-300 hover:shadow-lg p-2 rounded-sm">
     {/* Image Container */}
     <div className="relative overflow-hidden aspect-[3/4] mb-3">
@@ -82,3 +86,5 @@ export const ProductCard = ({ product }: { product: Product }) => (
     </div>
   </div>
 );
+
+export default ProductCart
