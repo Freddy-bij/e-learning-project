@@ -1,4 +1,4 @@
-import type { welcomeProp } from "../../Types/types"
+import type { welcomeProp } from "../../../Types/types"
 import { motion } from "framer-motion";
 
 interface Props {

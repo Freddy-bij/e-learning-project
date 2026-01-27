@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import type { LinkProp } from "../../Types/types"
+import type { LinkProp } from "../../../Types/types"
 
 interface Props {
     link:LinkProp

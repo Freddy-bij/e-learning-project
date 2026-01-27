@@ -4,7 +4,7 @@ import { SlUser } from "react-icons/sl";
 import { FaRegHeart, FaShoppingBag } from "react-icons/fa";
 import Search from "./Search";
 import { ModelContext } from "../../../Popup";
-import CartSidebar from "./CartSidebar"; // 2. Import your new file
+import CartSidebar from "../ui/CartSidebar"; // 2. Import your new file
 
 const Navbar = () => {
   // 3. Define the state here

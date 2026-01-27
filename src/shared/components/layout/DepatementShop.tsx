@@ -1,6 +1,6 @@
 import { IoIosArrowDown } from "react-icons/io"
-import LinksDep from "../LinksDep"
-import ShopDep from "../ShopDep"
+import LinksDep from "./LinksDep"
+import ShopDep from "../ui/ShopDep"
 import type { LinkProp } from "../../../Types/types"
 
 const links:LinkProp[] = [

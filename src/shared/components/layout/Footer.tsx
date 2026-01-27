@@ -1,4 +1,4 @@
-import All from "../All@"
+import All from "./All@"
 import FooterInfo from "./FooterInfo"
 
 const Footer = () => {

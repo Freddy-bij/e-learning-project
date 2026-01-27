@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { allProducts } from '../../Types/Product';
-import { ShopSidebar } from '../../shared/components/ShopSidebar';
+import { ShopSidebar } from '../../shared/components/ui/ShopSidebar';
 
 import FlotingCart from '../../shared/components/ui/FlotingCart';
-import ProductCart from '../../shared/ProductGrid';
+import ProductCart from '../../shared/components/ui/ProductGrid';
 
 
 

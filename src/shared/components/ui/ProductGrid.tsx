@@ -1,5 +1,5 @@
 import { Heart, Search, ArrowRightLeft } from 'lucide-react';
-import type { Product } from '../Types/types';
+import type { Product } from '../../../Types/types';
 import { useNavigate } from 'react-router-dom'; 
 
 interface ProductCartProps {

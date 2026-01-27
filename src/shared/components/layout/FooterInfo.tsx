@@ -3,7 +3,7 @@ import logo from "../../../images/image.png";
 import { TiHomeOutline } from "react-icons/ti";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
-import { SocialBar } from "../SocialBar";
+import { SocialBar } from "../ui/SocialBar";
 
 const FooterInfo = () => {
   return (

@@ -1,5 +1,6 @@
 import { IoHeartOutline } from "react-icons/io5"
-import type { ProductProp } from "../../Types/types";
+import type { ProductProp } from "../../../Types";
+
 
 
 const ProductCart = ({ img, title, description, numb1, icon, num2, price, discount }: ProductProp) => {

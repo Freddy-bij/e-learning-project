@@ -1,6 +1,6 @@
 
 import Descript from "./Descript"
-import Lang from "../Lang"
+import Lang from "./Lang"
 
 
 const Head = () => {

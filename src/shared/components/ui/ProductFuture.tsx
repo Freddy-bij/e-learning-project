@@ -1,11 +1,11 @@
 import { IoStar } from "react-icons/io5"
-import ProductCart from "./ProductCart"
 import men from "../../images/men.jpg"
 import short from "../../images/short.jpg"
 import leather from "../../images/leather.jpg"
 import casual from "../../images/casual.jpg"
 import luggage from "../../images/luggage.jpg"
-import type { ProductProp } from "../../Types/types"
+import type { ProductProp } from "../../../Types/types"
+import ProductCart from "./ProductCart"
 
 
 const ProductData: ProductProp[] = [

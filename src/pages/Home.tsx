@@ -1,6 +1,6 @@
 
-import Futures from "../shared/components/Futures"
-import Welcome from "../shared/components/Welcome"
+import Futures from "../shared/components/ui/Futures"
+import Welcome from "../shared/components/ui/Welcome"
 import men from "../images/men.jpg"
 import girl from "../images/girl.jpg"
 import shoes from "../images/femelshoes.jpg"
@@ -13,8 +13,8 @@ import tops from "../images/tops.jpg"
 import lingerie from "../images/lengerie.jpg"
 import type { futureProp } from "../Types/types"
 
-import ProductFuture from "../shared/components/ProductFuture"
-import MensFashion from "../shared/components/MenFashion"
+import ProductFuture from "../shared/components/ui/ProductFuture"
+import MensFashion from "../shared/components/ui/MenFashion"
 
 const futuresData:futureProp[] = [
   {

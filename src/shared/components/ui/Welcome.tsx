@@ -1,7 +1,7 @@
 import img from "../../images/bgrem.png"
 import shoes from "../../images/shoes.png"
 import womenbag from "../../images/womenbag.png"
-import type { welcomeProp } from "../../Types/types";
+import type { welcomeProp } from "../../../Types/types";
 import WelcomCart from "./WelcomCart";
 
 const WelcomeCartData: welcomeProp[] = [

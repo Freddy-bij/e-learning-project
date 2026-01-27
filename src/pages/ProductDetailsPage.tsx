@@ -22,7 +22,6 @@ const calculateTimeLeft = (targetDate: Date) => {
 const ProductDetailsPage = () => {
 const { productId } = useParams();
 
-  // 1. Move ALL hooks to the very top
   const [targetDate] = useState(new Date("2026-12-31T23:59:59"));
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate));
 
@@ -31,17 +30,13 @@ const { productId } = useParams();
       setTimeLeft(calculateTimeLeft(targetDate));
     }, 1000);
 
-    // Clean up interval on unmount to prevent memory leaks
     return () => clearInterval(timer);
   }, [targetDate]);
 
-  // 2. Define helper functions
   const formatNumber = (num: number) => String(num).padStart(2, "0");
 
-  // 3. Perform data lookup
   const product = allProducts.find((p) => p.id === Number(productId));
 
-  // 4. NOW you can return early if the product is missing
   if (!product) {
     return (
       <div className="py-20 text-center font-bold text-gray-500">
@@ -53,11 +48,11 @@ const { productId } = useParams();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      {/* Breadcrumbs */}
+
     
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Left: Image Gallery */}
+     
         <div className="flex gap-4">
           <div className="flex flex-col gap-2 w-20">
             {[1, 2, 3, 4].map((i) => (
@@ -76,7 +71,6 @@ const { productId } = useParams();
           </div>
         </div>
 
-        {/* Right: Product Info */}
         <div className="flex flex-col gap-4">
         <div className="text-xs text-gray-400  flex gap-2">
         <span>Home</span> / <span>Shop</span> /{" "}
@@ -106,26 +100,7 @@ const { productId } = useParams();
             </span>
           </div>
 
-          {/* Countdown Timer
-          <div className="flex gap-4 ">
-            {["Days", "Hrs", "Mins", "Secs"].map((label, idx) => (
-              <div
-                key={label}
-                className=" flex justify-center items-center  bg-white border border-gray-400 w-10 h-10 "
-              >
-                <div>
-                  <div className="text-md font-bold text-blue-600">
-                    0{idx + 1}
-                  </div>
-                  <div className="text-[10px] text-black font-medium uppercase">
-                    {label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div> */}
-
-          {/* Countdown Timer */}
+       
 <div className="flex gap-4">
   {Object.entries(timeLeft).map(([label, value]) => (
     <div
@@ -144,7 +119,7 @@ const { productId } = useParams();
   ))}
 </div>
 
-          {/* Options */}
+          
           <div className="flex flex-col gap-6 mt-4">
             <div>
               <span className="text-sm font-bold block mb-2">Color</span>
@@ -183,7 +158,7 @@ const { productId } = useParams();
             </div>
           </div>
 
-          {/* Footer Actions */}
+         
           <div className="flex gap-6 mt-6 pt-6 border-t border-gray-100 text-[11px] font-bold text-gray-500 uppercase">
             <div className="flex items-center gap-2 cursor-pointer hover:text-blue-600">
               <Heart size={14} /> Add to Wishlist
