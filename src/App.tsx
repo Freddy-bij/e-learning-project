@@ -7,6 +7,7 @@ import Elements from "./pages/Elements";
 import ByNow from "./pages/ByNow";
 import ProductCategoriesSidebar from "./pages/Shop/ShopPage";
 import ShopPage from "./pages/Shop/ShopPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 
 const App = () => {
   return (
@@ -20,7 +21,7 @@ const App = () => {
           <Route path="By" element={<ByNow />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/shop/:categoryName" element={<ShopPage />} />
-
+          <Route path="/product/:productId" element={<ProductDetailsPage />} />
           <Route path="blog" element={<Blog />} />
         </Route>
       </Routes>

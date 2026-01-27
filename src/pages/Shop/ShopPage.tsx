@@ -4,7 +4,8 @@ import { allProducts } from '../../Types/Product';
 import { ShopSidebar } from '../../shared/components/ShopSidebar';
 
 import FlotingCart from '../../shared/components/ui/FlotingCart';
-import ProductCart from "../../shared/Productgrid"
+import ProductCart from '../../shared/ProductGrid';
+
 
 
 
