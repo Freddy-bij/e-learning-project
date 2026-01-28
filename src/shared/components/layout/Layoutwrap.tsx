@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ModelContext } from "../../../Popup";
 import Layout from "./Layout";
-import Login from "../forms/Login";
+import Login from "../forms/Atuth";
 
 
 const LayoutWrapper = () => {
