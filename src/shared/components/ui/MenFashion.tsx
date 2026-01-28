@@ -1,4 +1,4 @@
-import suit from "../../images/sut.jpg"
+import suit from "../../../images/sut.jpg"
 
 
 const products = [
