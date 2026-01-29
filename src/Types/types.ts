@@ -17,7 +17,7 @@ export interface welcomeProp {
 }
 
 export interface futureProp {
-  id: number,
+  id: string,
   title: string,
   img: string
 }

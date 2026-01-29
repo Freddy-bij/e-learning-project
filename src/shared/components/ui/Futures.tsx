@@ -37,7 +37,7 @@ const Futures = ({ future }: Props) => {
         {/* Image Container */}
         <div className="w-24 h-24 mb-2 overflow-hidden rounded-full border-2 border-transparent transition-all duration-300 group-hover:border-blue-600 group-hover:shadow-md bg-gray-100">
           <img 
-            src={imageError ? placeholderImage : future.img}
+            src={   imageError ? placeholderImage : future.img}
             alt={future.title} 
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
             onError={handleImageError}

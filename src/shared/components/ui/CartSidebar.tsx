@@ -104,14 +104,7 @@ const CartSidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                 </p>
               </div>
 
-              {/* <div className="flex flex-col gap-2.5">
-                <button className="w-full bg-[#2b77f1] text-white py-3.5 font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-blue-700 transition-all">
-                  View Cart
-                </button>
-                <button className="w-full bg-[#ff6f00] text-white py-3.5 font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-orange-600 transition-all">
-                  Checkout
-                </button>
-              </div> */}
+             
 
               <div className="flex flex-col gap-2.5">
   <Link 

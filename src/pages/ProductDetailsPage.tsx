@@ -1,12 +1,11 @@
 
-
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Heart, ArrowRightLeft, Share2 } from "lucide-react";
-import { allProducts } from "../Types/Product";
 import { useEffect, useState } from "react";
 import { useCart } from "../hooks/UseCart";
 import CartSidebar from "../shared/components/ui/CartSidebar";
- // 2. Import Sidebar to show it on add
+import { getProductById, type Product } from "../services/ProductService";
+import type { Product as CartProduct } from "../Types/types";
 
 const calculateTimeLeft = (targetDate: Date) => {
   const difference = +targetDate - +new Date();
@@ -25,13 +24,39 @@ const calculateTimeLeft = (targetDate: Date) => {
 
 const ProductDetailsPage = () => {
   const { productId } = useParams();
-  const { addToCart } = useCart(); // 3. Use the hook
+  const { addToCart } = useCart();
 
-  // States for timer and Sidebar
+  // State
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [targetDate] = useState(new Date("2026-12-31T23:59:59"));
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate));
-  const [isCartOpen, setIsCartOpen] = useState(false); // 4. Local state for sidebar popup
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
+  // Fetch product on mount
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!productId) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getProductById(productId);
+        setProduct(data);
+      } catch (err) {
+        console.error('Failed to fetch product:', err);
+        setError('Failed to load product details. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  // Timer effect
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft(targetDate));
@@ -40,20 +65,57 @@ const ProductDetailsPage = () => {
   }, [targetDate]);
 
   const formatNumber = (num: number) => String(num).padStart(2, "0");
-  const product = allProducts.find((p) => p.id === Number(productId));
 
-  // 5. Action Handler
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product, 1); // Adds 1 item
-      setIsCartOpen(true);   // Automatically opens the sidebar
+      addToCart(product as unknown as CartProduct, 1);
+      setIsCartOpen(true);
     }
   };
 
-  if (!product) {
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const placeholderImage = "https://via.placeholder.com/600x800?text=No+Image";
+
+  // Get category name
+  const categoryName = product && typeof product.categoryId === 'object' 
+    ? product.categoryId.name 
+    : 'Category';
+
+  // Loading State
+  if (loading) {
     return (
-      <div className="py-20 text-center font-bold text-gray-500">
-        Product not found
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="animate-pulse">
+            <div className="bg-gray-200 aspect-[3/4] rounded"></div>
+          </div>
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+            <div className="h-32 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error State
+  if (error || !product) {
+    return (
+      <div className="py-20 text-center">
+        <h2 className="text-2xl font-bold text-gray-500 mb-4">
+          {error || "Product not found"}
+        </h2>
+        <Link 
+          to="/shop"
+          className="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+        >
+          Back to Shop
+        </Link>
       </div>
     );
   }
@@ -63,41 +125,94 @@ const ProductDetailsPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Images Section */}
         <div className="flex gap-4">
+          {/* Thumbnail Column - Show same image 4 times for now */}
           <div className="flex flex-col gap-2 w-20">
             {[1, 2, 3, 4].map((i) => (
-              <img key={i} src={product.image} className="border border-gray-200 cursor-pointer" />
+              <div key={i} className="border border-gray-200 cursor-pointer hover:border-blue-500 transition-colors">
+                <img 
+                  src={imageError ? placeholderImage : (product.img || placeholderImage)}
+                  alt={`${product.name} thumbnail ${i}`}
+                  className="w-full h-full object-cover"
+                  onError={handleImageError}
+                />
+              </div>
             ))}
           </div>
+
+          {/* Main Image */}
           <div className="flex-1 relative">
-            <span className="absolute top-2 left-2 bg-orange-500 text-white text-[10px] px-2 py-1 font-bold uppercase z-10">
-              Featured
-            </span>
-            <img src={product.image} className="w-full" alt={product.name} />
+            {/* Featured Badge */}
+            {product.inStock && (
+              <span className="absolute top-2 left-2 bg-orange-500 text-white text-[10px] px-2 py-1 font-bold uppercase z-10">
+                In Stock
+              </span>
+            )}
+            {!product.inStock && (
+              <span className="absolute top-2 left-2 bg-red-600 text-white text-[10px] px-2 py-1 font-bold uppercase z-10">
+                Out of Stock
+              </span>
+            )}
+            <img 
+              src={imageError ? placeholderImage : (product.img || placeholderImage)}
+              alt={product.name}
+              className="w-full"
+              onError={handleImageError}
+            />
+            {imageError && (
+              <div className="text-center text-sm text-red-500 mt-2">
+                Image not available
+              </div>
+            )}
           </div>
         </div>
 
         {/* Info Section */}
         <div className="flex flex-col gap-4">
+          {/* Breadcrumb */}
           <div className="text-xs text-gray-400 flex gap-2">
-            <span>Home</span> / <span>Shop</span> / <span className="text-gray-800">{product.name}</span>
+            <Link to="/" className="hover:text-blue-600">Home</Link> 
+            / 
+            <Link to="/shop" className="hover:text-blue-600">Shop</Link> 
+            /
+            <span className="text-gray-600">{categoryName}</span>
+            / 
+            <span className="text-gray-800">{product.name}</span>
           </div>
           
+          {/* Title and Share */}
           <div className="flex justify-between items-start">
             <h1 className="text-2xl font-bold text-gray-800">{product.name}</h1>
-            <Share2 size={18} className="text-gray-400 cursor-pointer hover:text-blue-600" />
+            <Share2 
+              size={18} 
+              className="text-gray-400 cursor-pointer hover:text-blue-600"
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+              }}
+            />
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">
-              {product.rating} ★
+          {/* Stock and Category */}
+          <div className="flex items-center gap-3">
+            <div className={`${product.inStock ? 'bg-green-600' : 'bg-red-600'} text-white text-[10px] px-2 py-0.5 rounded font-bold`}>
+              {product.inStock ? `${product.quantity} in stock` : 'Out of stock'}
             </div>
-            <span className="text-gray-400 text-xs uppercase font-bold tracking-tighter">In Stock</span>
+            <span className="text-gray-400 text-xs uppercase font-bold tracking-tighter">
+              {categoryName}
+            </span>
           </div>
 
+          {/* Price */}
           <div className="text-2xl font-bold text-gray-900">
-            ${product.price.toFixed(2)} 
-            <span className="text-green-600 text-sm font-normal ml-2">19% Off</span>
+            ${product.price.toFixed(2)}
           </div>
+
+          {/* Description */}
+          {product.description && (
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {product.description}
+            </p>
+          )}
 
           {/* Timer */}
           <div className="flex gap-4">
@@ -109,29 +224,35 @@ const ProductDetailsPage = () => {
             ))}
           </div>
 
-          {/* Variants */}
-          <div className="flex flex-col gap-6 mt-4">
-            <div>
-              <span className="text-sm font-bold block mb-2 uppercase text-[11px] tracking-widest">Color</span>
-              <div className="flex gap-2">
-                {product.colors.map((c) => (
-                  <div key={c} className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer" style={{ backgroundColor: c }} />
-                ))}
-              </div>
-            </div>
+          {/* Quantity */}
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-bold uppercase text-[11px] tracking-widest">Quantity Available:</span>
+            <span className="text-lg font-bold text-blue-600">{product.quantity}</span>
+          </div>
 
-            {/* Buttons */}
-            <div className="flex gap-4">
-              <button 
-                onClick={handleAddToCart} // 6. Linked Handler
-                className="flex-1 bg-orange-500 text-white font-bold py-3 uppercase text-[11px] tracking-widest hover:bg-orange-600 transition-colors shadow-md"
-              >
-                Add to Cart
-              </button>
-              <button className="flex-1 bg-[#2b77f1] text-white font-bold py-3 uppercase text-[11px] tracking-widest hover:bg-blue-700 transition-colors shadow-md">
-                Buy Now
-              </button>
-            </div>
+          {/* Action Buttons */}
+          <div className="flex gap-4 mt-4">
+            <button 
+              onClick={handleAddToCart}
+              disabled={!product.inStock}
+              className={`flex-1 font-bold py-3 uppercase text-[11px] tracking-widest transition-colors shadow-md ${
+                product.inStock 
+                  ? 'bg-orange-500 text-white hover:bg-orange-600'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+            </button>
+            <button 
+              disabled={!product.inStock}
+              className={`flex-1 font-bold py-3 uppercase text-[11px] tracking-widest transition-colors shadow-md ${
+                product.inStock
+                  ? 'bg-[#2b77f1] text-white hover:bg-blue-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Buy Now
+            </button>
           </div>
 
           {/* Social Links */}
@@ -143,10 +264,27 @@ const ProductDetailsPage = () => {
               <ArrowRightLeft size={14} /> Compare
             </div>
           </div>
+
+          {/* Product Meta */}
+          <div className="mt-6 pt-6 border-t border-gray-100 space-y-2 text-sm">
+            <div className="flex gap-2">
+              <span className="text-gray-500 font-bold">SKU:</span>
+              <span className="text-gray-700">{product._id.slice(-8).toUpperCase()}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-gray-500 font-bold">Category:</span>
+              <Link 
+                to={`/shop/${categoryName.toLowerCase().replace(/\s+/g, '-')}`}
+                className="text-blue-600 hover:underline"
+              >
+                {categoryName}
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 7. Sidebar Component rendered here for the auto-popup */}
+      {/* Cart Sidebar */}
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   );

@@ -3,9 +3,13 @@ import { useContext, useState } from "react";
 import { ModelContext } from "../../../Popup";
 import { Eye, EyeOff, X } from 'lucide-react';
 import { loginUser, registerUser } from "../../../services/authService";
+import { useNavigate } from "react-router";
+
 
 const Auth = () => {
   const context = useContext(ModelContext);
+  const navigation = useNavigate()
+
 
   if (!context) throw new Error("Auth must be used within ModelContext Provider");
   const { closeModel } = context;
@@ -41,6 +45,7 @@ const Auth = () => {
           window.dispatchEvent(new Event('userLogin'));
           
           closeModel();       
+          navigation("/")
              
         }
       }
@@ -104,6 +109,15 @@ const Auth = () => {
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                 className="w-full border border-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
             )}
+
+               <div className="flex itmex-center justify-between text-xs font-medium text-blue-600 ">
+                <div className="flex gap-0.5">
+                  <input type="checkbox" />
+                  <p>Remember me </p>
+                </div>
+                
+                <span>Lost your password</span>
+               </div>
 
             <button onClick={handleSubmit} className="bg-blue-600 w-full text-white py-3.5 font-bold rounded-lg hover:bg-blue-700 shadow-lg shadow-blue-200 active:scale-[0.98] transition-all">
               {isSignUp ? 'REGISTER NOW' : 'SIGN IN'}

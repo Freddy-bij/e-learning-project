@@ -1,9 +1,8 @@
-
 export interface Category {
   _id: string;
   name: string;
   description?: string;
-  img: string; 
+  img: string; // Now this will be a full Cloudinary URL
   createdAt?: string;
   updatedAt?: string;
 }
@@ -11,21 +10,8 @@ export interface Category {
 const API_BASE_URL = "http://localhost:3000"; 
 const API_URL = `${API_BASE_URL}/api/categories`;
 
-/**
- * Helper function to ensure image URLs are absolute and correctly formatted
- */
-const formatImageUrl = (imgPath: string): string => {
-  if (!imgPath) return ""; // Handle empty paths
-  if (imgPath.startsWith('http')) return imgPath;
-  
-  // Ensure the path starts with a single forward slash
-  const cleanPath = imgPath.startsWith('/') ? imgPath : `/${imgPath}`;
-  return `${API_BASE_URL}${cleanPath}`;
-};
 
-/**
- * Fetches all categories from the backend
- */
+
 export const getAllCategories = async (): Promise<Category[]> => {
   try {
     const response = await fetch(API_URL, {
@@ -41,10 +27,8 @@ export const getAllCategories = async (): Promise<Category[]> => {
 
     const categories: Category[] = await response.json();
     
-    return categories.map(category => ({
-      ...category,
-      img: formatImageUrl(category.img)
-    }));
+    // Cloudinary URLs are already complete, no need to format
+    return categories;
   } catch (error) {
     console.error("Category Service Error:", error);
     throw error;
@@ -60,10 +44,7 @@ export const getCategoryById = async (id: string): Promise<Category> => {
     if (!response.ok) throw new Error("Failed to fetch category");
     
     const category: Category = await response.json();
-    return {
-      ...category,
-      img: formatImageUrl(category.img)
-    };
+    return category;
   } catch (error) {
     console.error("Get Category Error:", error);
     throw error;
@@ -95,13 +76,9 @@ export const createCategory = async (
     }
 
     const data = await response.json();
-    // Some backends return the object directly, others wrap it in { category: {...} }
     const category = data.category || data; 
     
-    return {
-      ...category,
-      img: formatImageUrl(category.img)
-    };
+    return category;
   } catch (error) {
     console.error("Create Category Error:", error);
     throw error;
@@ -136,10 +113,7 @@ export const updateCategory = async (
     const data = await response.json();
     const category = data.category || data;
     
-    return {
-      ...category,
-      img: formatImageUrl(category.img)
-    };
+    return category;
   } catch (error) {
     console.error("Update Category Error:", error);
     throw error;

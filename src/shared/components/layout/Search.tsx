@@ -7,7 +7,7 @@ const Search = () => {
            <div className=" text-black text-sm flex h-10 items-center px-5 bg-white rounded-4xl ">
             <div>
                  <input
-              className="w-90 placeholder-black   outline-none "
+              className=" w-70 xl:w-90 placeholder-black   outline-none "
                 type="text"
                 placeholder="search for products , category,branch..."
               />

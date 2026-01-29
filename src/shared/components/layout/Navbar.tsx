@@ -45,7 +45,7 @@ const Navbar = () => {
   const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   return (
-    <div className="w-[80%] mx-auto py-8 flex justify-between text-white items-center relative">
+    <div className=" w-[90%] xl:w-[80%] mx-auto py-8 flex justify-between text-white items-center relative">
       <div className="w-26 cursor-pointer"><img src={image} alt="logo" /></div>
       <Search />
 
