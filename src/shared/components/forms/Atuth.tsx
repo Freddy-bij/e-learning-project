@@ -1,128 +1,10 @@
-// import { useContext, useState } from "react";
-// import { useNavigate } from "react-router-dom"; 
-// import { ModelContext } from "../../../Popup";
-// import { Eye, EyeOff, X } from 'lucide-react';
-// import { loginUser, registerUser } from "../../../services/authService";
 
-// const Auth = () => {
-//   const navigate = useNavigate();
-//   const context = useContext(ModelContext);
-
-//   if (!context) throw new Error("Auth must be used within ModelContext Provider");
-//   const { closeModel } = context;
-
-//   const [isSignUp, setIsSignUp] = useState(false);
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
-
-//   const handleSubmit = async () => {
-//     try {
-//       if (isSignUp) {
-//         if (!formData.name || !formData.email || !formData.password) return alert("Please fill all fields");
-//         await registerUser({ name: formData.name, email: formData.email, password: formData.password });
-//         alert("Registration successful! Please login.");
-//         setIsSignUp(false);
-//       } else {
-//   const result = await loginUser({ email: formData.email, password: formData.password });
-
-//   if (result && result.token) {
-//     localStorage.setItem("token", result.token);
-    
-//     // DEBUG: Look at this in your browser console (F12)!
-//     console.log("Your Backend sent this:", result);
-
-//     // This logic tries every possible name field returned by typical backends
-//     const detectedName = 
-//       result.user?.name || 
-//       result.user?.username || 
-//       result.name || 
-//       result.username || 
-//       result.data?.name || 
-//       "User"; // Fallback if nothing is found
-
-//     localStorage.setItem("userName", detectedName);
-    
-//     // Trigger Navbar Update
-//     window.dispatchEvent(new Event('userLogin'));
-    
-//     closeModel();       
-//     navigate("/shop");   
-//   }
-// }
-//     } catch (error: any) {
-//       alert(error.message || "Authentication failed");
-//     }
-//   };
-
-//   return (
-//     <div className="bg-black/70 fixed top-0 left-0 h-full w-full text-white flex items-center justify-center z-[100]">
-//       <div className="flex shadow-2xl rounded-lg overflow-hidden max-w-4xl bg-white mx-4">
-//         <div className="bg-blue-600 px-8 py-10 w-64 hidden sm:flex flex-col justify-center text-white">
-//           <h1 className="text-3xl font-bold pb-2">{isSignUp ? 'Register' : 'Login'}</h1>
-//           <p className="text-blue-50 text-xs opacity-80">Access your personalized shop, orders, and wishlist.</p>
-//         </div>
-
-//         <div className="bg-white text-black w-full sm:w-96 relative p-8">
-//           <button onClick={closeModel} className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors">
-//             <X size={24} />
-//           </button>
-
-//           <div className="space-y-4 mt-6">
-//             {isSignUp && (
-//               <input type="text" placeholder="Full Name" value={formData.name}
-//                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-//                 className="w-full border border-gray-300 p-2.5 rounded focus:border-blue-500 outline-none transition-all" />
-//             )}
-//             <input type="email" placeholder="Email Address" value={formData.email}
-//               onChange={(e) => setFormData({...formData, email: e.target.value})}
-//               className="w-full border border-gray-300 p-2.5 rounded focus:border-blue-500 outline-none transition-all" />
-            
-//             <div className="relative border border-gray-300 rounded focus-within:border-blue-500 transition-all">
-//               <input type={showPassword ? "text" : "password"} placeholder="Password"
-//                 value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})}
-//                 className="w-full p-2.5 outline-none pr-12" />
-//               <button onClick={() => setShowPassword(!showPassword)} className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-blue-600">
-//                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-//               </button>
-//             </div>
-
-//             {isSignUp && (
-//               <input type="password" placeholder="Confirm Password" value={formData.confirmPassword}
-//                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-//                 className="w-full border border-gray-300 p-2.5 rounded focus:border-blue-500 outline-none transition-all" />
-//             )}
-
-//             <button onClick={handleSubmit} className="bg-blue-600 w-full text-white py-3 font-bold rounded hover:bg-blue-700 shadow-lg active:scale-[0.98] transition-all mt-2">
-//               {isSignUp ? 'CREATE ACCOUNT' : 'LOG IN'}
-//             </button>
-
-//             <p className="text-center text-sm text-gray-500 pt-2">
-//               {isSignUp ? "Already a member? " : "Don't have an account? "}
-//               <button onClick={() => setIsSignUp(!isSignUp)} className="text-blue-600 font-bold hover:underline">
-//                 {isSignUp ? 'Login' : 'Sign Up'}
-//               </button>
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Auth;
-
-
-
-
-
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useContext, useState } from "react"; 
 import { ModelContext } from "../../../Popup";
 import { Eye, EyeOff, X } from 'lucide-react';
 import { loginUser, registerUser } from "../../../services/authService";
 
 const Auth = () => {
-  const navigate = useNavigate();
   const context = useContext(ModelContext);
 
   if (!context) throw new Error("Auth must be used within ModelContext Provider");
@@ -159,11 +41,12 @@ const Auth = () => {
           window.dispatchEvent(new Event('userLogin'));
           
           closeModel();       
-          navigate("/shop");   
+             
         }
       }
-    } catch (error: any) {
-      alert(error.message || "Authentication failed");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      alert(message || "Authentication failed");
     }
   };
 
